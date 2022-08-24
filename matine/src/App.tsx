@@ -11,7 +11,7 @@ import { HomeCategory } from "./components/HomeCategory";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout";
 import Home from "./pages/Home";
-
+import "./App.css"
 export default function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>

@@ -63,7 +63,7 @@ export function HomeCategory({ categories }: any) {
                     src={category.imageURL}
                     alt={category.title}
                   />
-                  {category.title}
+                  <span style={{paddingLeft: 10, textTransform: "capitalize"}}>{category.title}</span>
                 </span>
               </Box>
             </Grid.Col>
