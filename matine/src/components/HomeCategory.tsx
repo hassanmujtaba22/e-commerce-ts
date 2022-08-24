@@ -11,8 +11,10 @@ import {
 
 const useStyles = createStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing.xl * 3,
-    paddingBottom: theme.spacing.xl * 3,
+    marginBottom: 30,
+    marginTop: 30,
+    backgroundColor: "white",
+    padding: 20,
   },
   grid: {
     display: "flex",
@@ -50,26 +52,26 @@ const useStyles = createStyles((theme) => ({
 export function HomeCategory({ categories }: any) {
   const { classes }: any = useStyles();
   return (
-    <div className={classes.root}>
-      <Container size="lg">
-        <Grid className={classes.grid} columns={4}>
-          {categories.map((category: any) => (
-            <Grid.Col sm={2} md={1} lg={1}>
-              <Box className={classes.card}>
-                <span>
-                  <Avatar
-                    radius="xl"
-                    className={classes.avatar}
-                    src={category.imageURL}
-                    alt={category.title}
-                  />
-                  <span style={{paddingLeft: 10, textTransform: "capitalize"}}>{category.title}</span>
+    <Container size="lg" className={classes.root}>
+      <Grid className={classes.grid} columns={4}>
+        {categories.map((category: any) => (
+          <Grid.Col key={category._id} sm={2} md={1} lg={1}>
+            <Box className={classes.card}>
+              <span>
+                <Avatar
+                  radius="xl"
+                  className={classes.avatar}
+                  src={category.imageURL}
+                  alt={category.title}
+                />
+                <span style={{ paddingLeft: 10, textTransform: "capitalize" }}>
+                  {category.title}
                 </span>
-              </Box>
-            </Grid.Col>
-          ))}
-        </Grid>
-      </Container>
-    </div>
+              </span>
+            </Box>
+          </Grid.Col>
+        ))}
+      </Grid>
+    </Container>
   );
 }

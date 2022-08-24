@@ -10,17 +10,20 @@ import {
   Image,
   Box,
   Autocomplete,
+  ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import DarsiLogo from "../assets/darsi-logo.png";
 import { ColorSchemeToggler } from "./ColorSchemeToggler";
-import { IconSearch } from "@tabler/icons";
+import { IconSearch, IconShoppingCart } from "@tabler/icons";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const HEADER_HEIGHT = 60;
 
 const useStyles: any = createStyles((theme) => ({
   root: {
-    position: "relative",
+    position: "sticky",
     zIndex: 1,
   },
 
@@ -45,7 +48,7 @@ const useStyles: any = createStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     height: "100%",
-    width: "80%",
+    width: "100%",
     margin: "0 auto",
   },
 
@@ -96,10 +99,10 @@ const useStyles: any = createStyles((theme) => ({
       color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
         .color,
     },
-  }, 
+  },
   search: {
-    [theme.fn.smallerThan('xs')]: {
-      display: 'none',
+    [theme.fn.smallerThan("xs")]: {
+      display: "none",
     },
   },
 }));
@@ -112,37 +115,54 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
-
+  const user = useSelector((state: any) => state.user.currentUser);
+  const cart = useSelector((state: any) => state.cart);
+  const { products } = useSelector((state: any) => state.product);
   const items = links.map((link) => (
-    <a
+    <Link
+      to={link.link}
       key={link.label}
-      href={link.link}
       className={cx(classes.link, {
         [classes.linkActive]: active === link.link,
       })}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.link);
-        close();
-      }}
     >
       {link.label}
-    </a>
+    </Link>
   ));
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
-      <Box className={classes.header}>
-        <Image src={DarsiLogo} width={60} />
+     <Container size="lg">
+     <Box className={classes.header}>
+        <Link to="/">
+          <Image src={DarsiLogo} width={60} />
+        </Link>
         <Group spacing={5} className={classes.links}>
           <Autocomplete
             className={classes.search}
             placeholder="Search"
             icon={<IconSearch size={16} stroke={1.5} />}
-            data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
+            data={[
+              "React",
+              "Angular",
+              "Vue",
+              "Next.js",
+              "Riot.js",
+              "Svelte",
+              "Blitz.js",
+            ]}
           />
           {items}
           {/* <ColorSchemeToggler /> */}
+          <ActionIcon
+            variant="subtle"
+            sx={{ color: "black"}}
+            component={Link}
+            to="/cart"
+          >
+            <IconShoppingCart size={20} />
+          </ActionIcon>
+          <span>{cart.products.length}</span>
         </Group>
 
         <Burger
@@ -159,6 +179,7 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
           )}
         </Transition>
       </Box>
+     </Container>
     </Header>
   );
 }

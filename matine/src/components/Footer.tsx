@@ -11,6 +11,7 @@ import {
   IconBrandYoutube,
   IconBrandInstagram,
 } from "@tabler/icons";
+import { Link } from "react-router-dom";
 import DarsiLogo from "../assets/darsi-logo.png";
 
 const useStyles = createStyles((theme) => ({
@@ -98,7 +99,7 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     marginTop: theme.spacing.xl,
     paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: theme.spacing.sm,
     borderTop: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
     }`,
@@ -127,15 +128,12 @@ export function FooterLinks({ data }: FooterLinksProps) {
 
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
-      <Text<"a">
+      <Link to={link.link}
         key={index}
         className={classes.link}
-        component="a"
-        href={link.link}
-        onClick={(event) => event.preventDefault()}
       >
         {link.label}
-      </Text>
+      </Link>
     ));
 
     return (
@@ -159,7 +157,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
       </Container>
       <Container size="lg" className={classes.afterFooter}>
         <Text color="dimmed" size="sm">
-          © 2020 mantine.dev. All rights reserved.
+          © {new Date().getFullYear()} mantine.dev. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
