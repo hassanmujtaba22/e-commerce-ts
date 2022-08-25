@@ -1,4 +1,4 @@
-import { Container, createStyles, Grid, ScrollArea, Table, Text } from '@mantine/core';
+import { Card, Container, createStyles, Grid, ScrollArea, Table, Text } from '@mantine/core';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
@@ -53,7 +53,7 @@ function Cart() {
       <td width="100px">
         <img
           src={product.imageURL}
-          style={{width: "100%"}}
+          style={{ width: "100%" }}
           alt="Product image"
         />
       </td>
@@ -61,119 +61,20 @@ function Cart() {
         {product.title}
       </td>
       <td >Rs.{product.price}</td>
-      <td>
-        {/* <input type="number" id="qty" defaultValue={1} min={1} step={1} data-decimals={0} required
+      <td width="100px">
+        <input type="number" id="qty" defaultValue={1} min={1} step={1} data-decimals={0} style={{ width: "100%" }}
           value={product.quantity}
           onChange={(e: any) => {
             dispatch(addProductToCart({ ...product, quantity: e.target.value }))
-          }} /> */}
-          <QuantityInput value={product.quantity} onChange={(e: any) => {
+          }} />
+        {/* <QuantityInput value={product.quantity} onChange={(e: any) => {
             dispatch(addProductToCart({ ...product, quantity: e.target.value }))
-          }}/>
+          }}/> */}
       </td>
       <td>Rs.{product.quantity * product.price}</td>
     </tr>
   ));
   return (
-    // <div className="page-content">
-    //   <div className="cart">
-    //     <div className="container">
-    //       <div className="row">
-    //         <div className="col-lg-9">
-    //           <table className="table table-cart table-mobile">
-    //             <thead>
-    //               <tr>
-    //                 <th>Product</th>
-    //                 <th>Price</th>
-    //                 <th>Quantity</th>
-    //                 <th>Total</th>
-    //                 <th />
-    //               </tr>
-    //             </thead>
-    //             <tbody>
-    //               {cart.products.length > 0 ?
-    //                 cart.products.map((item: any) => (
-    //                   <tr key={item._id}>
-    //                     <td className="product-col">
-    //                       <div className="product">
-    //                         <figure className="product-media">
-    //                           <Link to={`/product/${item._id}`}>
-    //                             <img
-    //                               src={item.imageURL}
-    //                               alt="Product image"
-    //                             />
-    //                           </Link>
-    //                         </figure>
-    //                         <h3 className="product-title">
-    //                           <Link to={`/product/${item._id}`}>
-    //                             {item.title}
-    //                           </Link>
-    //                         </h3>{/* End .product-title */}
-    //                       </div>{/* End .product */}
-    //                     </td>
-    //                     <td className="price-col">Rs.{item.price}</td>
-    //                     <td className="quantity-col">
-    //                       <div className="cart-product-quantity">
-    //                         <input type="number" id="qty" className="form-control" defaultValue={1} min={1} step={1} data-decimals={0} required
-    //                           value={item.quantity}
-    //                           onChange={(e: any) => {
-    //                             dispatch(addProductToCart({ ...item, quantity: e.target.value }))
-    //                           }} />
-    //                       </div>{/* End .cart-product-quantity */}
-    //                     </td>
-    //                     <td className="total-col">Rs.{item.quantity * item.price}</td>
-    //                     <td className="remove-col"><button className="btn-remove" onClick={() => dispatch(clearProductFromCart(item))}><i className="icon-close" /></button></td>
-    //                   </tr>
-    //                 ))
-
-    //                 : null}
-    //             </tbody>
-    //           </table>{/* End .table table-wishlist */}
-    //           <div className="cart-bottom">
-    //             <div className="cart-discount">
-    //               <div>
-    //                 <div className="input-group">
-    //                   <input type="text" className="form-control" value={code} onChange={(e) => setCode(e.target.value)} required placeholder="coupon code" />
-    //                   <div className="input-group-append">
-    //                     <button className="btn btn-outline-primary-2" onClick={() =>
-    //                       apply_discount_code(dispatch, code).then((res: any) =>
-    //                         setPackage(res)
-    //                       )
-    //                     }><i className="icon-long-arrow-right" /></button>
-    //                   </div>{/* .End .input-group-append */}
-    //                 </div>{/* End .input-group */}
-    //               </div>
-    //             </div>{/* End .cart-discount */}
-    //             <button className="btn btn-outline-dark-2" onClick={()=> dispatch(clear_cart())}><span>CLEAR CART</span><i className="icon-refresh" /></button>
-    //           </div>{/* End .cart-bottom */}
-    //         </div>{/* End .col-lg-9 */}
-    //         <aside className="col-lg-3">
-    //           <div className="summary summary-cart">
-    //             <h3 className="summary-title">Cart Total</h3>{/* End .summary-title */}
-    //             <table className="table table-summary">
-    //               <tbody>
-    //                 <tr className="summary-subtotal">
-    //                   <td>Subtotal:</td>
-    //                   <td>Rs.{cart.total}</td>
-    //                 </tr>
-    //                 <tr className="summary-subtotal">
-    //                   <td>Discount:</td>
-    //                   <td>Rs.{calculateDiscount()}</td>
-    //                 </tr>
-    //                 <tr className="summary-total">
-    //                 <td>Total:</td>
-    //                   <td>Rs.{cart.total-calculateDiscount()}</td>
-    //                 </tr>{/* End .summary-total */}
-    //               </tbody>
-    //             </table>{/* End .table table-summary */}
-    //             <Link to="/checkout" className="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</Link>
-    //           </div>{/* End .summary */}
-    //           <Link to="/" className="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i className="icon-refresh" /></Link>
-    //         </aside>{/* End .col-lg-3 */}
-    //       </div>{/* End .row */}
-    //     </div>{/* End .container */}
-    //   </div>{/* End .cart */}
-    // </div>
     <Container
       size="lg"
       sx={{
@@ -187,7 +88,7 @@ function Cart() {
         Cart
       </Text>
       <Grid columns={3}>
-        <Grid.Col xs={3} sm={2} md={1} lg={2}>
+        <Grid.Col xs={3} sm={3} md={2} lg={2}>
           <ScrollArea sx={{ height: 300 }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
             <Table sx={{ minWidth: "100%" }}>
               <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
@@ -203,7 +104,32 @@ function Cart() {
             </Table>
           </ScrollArea>
         </Grid.Col>
-        <Grid.Col xs={3} sm={2} md={1} lg={2}>
+        <Grid.Col xs={3} sm={3} md={1} lg={1}>
+          <Card shadow="sm" p="lg" radius="md" withBorder sx={{ minWidth: "100%", height: "100%" }}>
+            <ScrollArea sx={{ height: 300 }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+              <Table sx={{ minWidth: "100%" }}>
+                <thead>
+                  <tr>
+                    <td>Cart Total</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b>Sub Total:</b></td>
+                    <td>Rs.{cart.total}</td>
+                  </tr>
+                  <tr>
+                    <td><b>Discount:</b></td>
+                    <td>Rs.{calculateDiscount()}</td>
+                  </tr>
+                  <tr>
+                    <td><b>Total:</b></td>
+                    <td>Rs.{cart.total - calculateDiscount()}</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </ScrollArea>
+          </Card>
         </Grid.Col>
       </Grid>
     </Container>
