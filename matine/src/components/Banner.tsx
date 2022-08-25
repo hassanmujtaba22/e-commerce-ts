@@ -1,114 +1,102 @@
-import { createStyles, Container, Title, Text, Button } from "@mantine/core";
+import {
+  createStyles,
+  Image,
+  Container,
+  Title,
+  Button,
+  Group,
+  Text,
+  List,
+  ThemeIcon,
+} from '@mantine/core';
+import { IconCheck } from '@tabler/icons';
+import { useEffect, useState } from 'react';
+import { get_banner_content } from '../redux/action/dashboard';
+import image from './image.svg';
 
 const useStyles = createStyles((theme) => ({
-  root: {
-    backgroundColor: "#11284b",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundImage:
-      "linear-gradient(250deg, rgba(130, 201, 30, 0) 0%, #062343 70%), url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80)",
-    paddingTop: theme.spacing.xl * 3,
-    paddingBottom: theme.spacing.xl * 3,
-  },
-
   inner: {
-    display: "flex",
-    justifyContent: "space-between",
-
-    [theme.fn.smallerThan("md")]: {
-      flexDirection: "column",
-    },
-  },
-
-  image: {
-    [theme.fn.smallerThan("md")]: {
-      display: "none",
-    },
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: theme.spacing.xl * 4,
+    paddingBottom: theme.spacing.xl * 4,
   },
 
   content: {
-    paddingTop: theme.spacing.xl * 2,
-    paddingBottom: theme.spacing.xl * 2,
+    maxWidth: 480,
     marginRight: theme.spacing.xl * 3,
 
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan('md')]: {
+      maxWidth: '100%',
       marginRight: 0,
     },
   },
 
   title: {
-    color: theme.white,
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    fontSize: 44,
+    lineHeight: 1.2,
     fontWeight: 900,
-    lineHeight: 1.05,
-    maxWidth: 500,
-    fontSize: 48,
 
-    [theme.fn.smallerThan("md")]: {
-      maxWidth: "100%",
-      fontSize: 34,
-      lineHeight: 1.15,
-    },
-  },
-
-  description: {
-    color: theme.white,
-    opacity: 0.75,
-    maxWidth: 500,
-
-    [theme.fn.smallerThan("md")]: {
-      maxWidth: "100%",
+    [theme.fn.smallerThan('xs')]: {
+      fontSize: 28,
     },
   },
 
   control: {
-    paddingLeft: 50,
-    paddingRight: 50,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontSize: 22,
-
-    [theme.fn.smallerThan("md")]: {
-      width: "100%",
+    [theme.fn.smallerThan('xs')]: {
+      flex: 1,
     },
+  },
+
+  image: {
+    flex: 1,
+
+    [theme.fn.smallerThan('md')]: {
+      display: 'none',
+    },
+  },
+
+  highlight: {
+    position: 'relative',
+    backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+    borderRadius: theme.radius.sm,
+    padding: '4px 12px',
   },
 }));
 
 export function Banner() {
+  const [content, setcontent]: any = useState({});
+
+  useEffect(() => {
+    get_banner_content().then(({ data }: any) => {
+      setcontent(data.data[0]);
+    });
+  }, []);
   const { classes } = useStyles();
   return (
-    <div className={classes.root}>
+    <div>
       <Container size="lg">
         <div className={classes.inner}>
           <div className={classes.content}>
             <Title className={classes.title}>
-              A{" "}
-              <Text
-                component="span"
-                inherit
-                variant="gradient"
-                gradient={{ from: "pink", to: "yellow" }}
-              >
-                fully featured
-              </Text>{" "}
-              React components library
+              {content.title}
             </Title>
-
-            <Text className={classes.description} mt={30}>
-              Build fully functional accessible web applications with ease –
-              Mantine includes more than 100 customizable components and hooks
-              to cover you in any situation
+            <Text color="dimmed" mt="md">
+             {content.sub_title}
             </Text>
-
-            <Button
-              variant="gradient"
-              gradient={{ from: "pink", to: "yellow" }}
-              size="xl"
-              className={classes.control}
-              mt={40}
-            >
-              Get started
-            </Button>
+            <Text color="dimmed" mt="md" dangerouslySetInnerHTML={{
+                __html: content?.description,
+              }}>
+            </Text>
+            <Group mt={30}>
+              <Button radius="xl" size="md" className={classes.control}>
+                {content.btn_text}
+              </Button>
+            </Group>
           </div>
+          <Image src={content.imageURL} className={classes.image} />
         </div>
       </Container>
     </div>

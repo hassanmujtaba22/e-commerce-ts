@@ -13,6 +13,8 @@ import Cart from "./pages/Cart";
 import Packages from "./pages/Packages";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 export default function App() {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
@@ -31,9 +33,11 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="login" element={<Login />} />
+              <Route path="register/:type" element={<Register />} />
               {/* <Route path="cart" element={<Cart />} /> */}
               <Route path="products" element={<Products />} />
-              {/* <Route path="packages" element={<Packages />} /> */}
+              <Route path="packages" element={<Packages />} />
               {/* <Route path="checkout" element={<Checkout />} /> */}
               {/* <Route path="product/:_id" element={<ProductDetail />} /> */}
             </Route>
