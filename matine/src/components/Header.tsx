@@ -162,7 +162,7 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
           >
             <IconShoppingCart size={20} />
           </ActionIcon>
-          <span>{cart.products.length}</span>
+          <span>{cart.quantity}</span>
         </Group>
 
         <Burger

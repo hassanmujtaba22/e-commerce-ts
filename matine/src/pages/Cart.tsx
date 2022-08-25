@@ -1,4 +1,5 @@
-import { Card, Container, createStyles, Grid, ScrollArea, Table, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, Container, createStyles, Grid, ScrollArea, Table, Text, TextInput } from '@mantine/core';
+import { IconSquareX } from '@tabler/icons';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
@@ -27,11 +28,30 @@ const useStyles = createStyles((theme) => ({
     boxShadow: theme.shadows.sm,
   },
 }));
+const useStylesDiscountInput = createStyles((theme) => ({
+  root: {
+    position: 'relative',
+  },
 
+  input: {
+    height: 'auto',
+    paddingTop: 18,
+  },
+
+  label: {
+    position: 'absolute',
+    pointerEvents: 'none',
+    fontSize: theme.fontSizes.xs,
+    paddingLeft: theme.spacing.sm,
+    paddingTop: theme.spacing.sm / 2,
+    zIndex: 1,
+  },
+}));
 interface TableScrollAreaProps {
   data: { name: string; email: string; company: string }[];
 }
 function Cart() {
+  const { classes: classesDiscountInput } = useStylesDiscountInput();
   const { classes, cx } = useStyles();
   const [scrolled, setScrolled] = useState(false);
   const user = useSelector((state: any) => state.user.currentUser);
@@ -72,6 +92,15 @@ function Cart() {
           }}/> */}
       </td>
       <td>Rs.{product.quantity * product.price}</td>
+      <td>
+        <ActionIcon
+          variant="subtle"
+          sx={{ color: "black" }}
+          onClick={() => dispatch(clearProductFromCart(product))}
+        >
+          <IconSquareX size={20} />
+        </ActionIcon>
+      </td>
     </tr>
   ));
   return (
@@ -98,6 +127,7 @@ function Cart() {
                   <th>Price</th>
                   <th>Qty</th>
                   <th>Total</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>{rows}</tbody>
@@ -105,30 +135,43 @@ function Cart() {
           </ScrollArea>
         </Grid.Col>
         <Grid.Col xs={3} sm={3} md={1} lg={1}>
-          <Card shadow="sm" p="lg" radius="md" withBorder sx={{ minWidth: "100%", height: "100%" }}>
+          <Card shadow="sm" p="lg" radius="md" withBorder sx={{ minWidth: "100%", height: "100%", background: "#F5F5F5" }}>
             <ScrollArea sx={{ height: 300 }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
               <Table sx={{ minWidth: "100%" }}>
                 <thead>
                   <tr>
-                    <td>Cart Total</td>
+                    <th colSpan={2}>Cart Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><b>Sub Total:</b></td>
+                    <td>Sub Total:</td>
                     <td>Rs.{cart.total}</td>
                   </tr>
                   <tr>
-                    <td><b>Discount:</b></td>
+                    <td>Discount:</td>
                     <td>Rs.{calculateDiscount()}</td>
                   </tr>
                   <tr>
-                    <td><b>Total:</b></td>
+                    <td>Total:</td>
                     <td>Rs.{cart.total - calculateDiscount()}</td>
                   </tr>
                 </tbody>
               </Table>
             </ScrollArea>
+            <TextInput label="Discount Code" placeholder="Enter code to get discount" classNames={classesDiscountInput}
+              value={code} onChange={(e) => setCode(e.target.value)}
+            />
+            <Button variant="light" sx={{marginTop: 10, width: "100%"}} color="indigo" onClick={() =>
+              apply_discount_code(dispatch, code).then((res: any) =>
+                setPackage(res)
+              )
+            }>
+              Apply Code
+            </Button>
+            <Button color="red" sx={{marginTop: 10, width: "100%"}} component={Link} to="/checkout">
+              PROCEED TO CHECKOUT
+            </Button>
           </Card>
         </Grid.Col>
       </Grid>
