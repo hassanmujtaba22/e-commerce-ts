@@ -65,17 +65,19 @@ export function ProductCard({ product }: any) {
   return (
     <Card radius="md" className={classes.card}>
       <Card.Section className={classes.imageSection}>
-        <Image
-          src={product.imageURL}
-          className={classes.image}
-          alt={product.title}
-        />
+
+        <Link to={`/product/${product._id}`}>
+          <Image
+            src={product.imageURL}
+            className={classes.image}
+            alt={product.title}
+          />
+        </Link>
       </Card.Section>
       <Card.Section className={classes.textSection}>
         <Link to={`/product/${product._id}`}>
-          <Text size="xs" weight={500}>{`${product.title.slice(0, 30)}${
-            product.title.length > 30 && "..."
-          }`}</Text>
+          <Text size="xs" weight={500}>{`${product.title.slice(0, 30)}${product.title.length > 30 && "..."
+            }`}</Text>
         </Link>
       </Card.Section>
       <Card.Section className={classes.footer}>
@@ -85,8 +87,6 @@ export function ProductCard({ product }: any) {
         <ActionIcon
           sx={{ color: "orange" }}
           onClick={() => {
-            console.log(product.stockCountPending);
-
             if (product.stockCountPending > 0) {
               dispatch(addProduct({ ...product, quantity: 1 }));
             }

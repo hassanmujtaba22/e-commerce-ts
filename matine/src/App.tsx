@@ -39,7 +39,7 @@ export default function App() {
               <Route path="products" element={<Products />} />
               <Route path="packages" element={<Packages />} />
               <Route path="checkout" element={<Checkout />} />
-              {/* <Route path="product/:_id" element={<ProductDetail />} /> */}
+              <Route path="product/:_id" element={<ProductDetail />} />
             </Route>
           </Routes>
         </BrowserRouter>

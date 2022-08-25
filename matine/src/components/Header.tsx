@@ -11,6 +11,7 @@ import {
   Box,
   Autocomplete,
   ActionIcon,
+  Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import DarsiLogo from "../assets/darsi-logo.png";
@@ -19,7 +20,7 @@ import { IconSearch, IconShoppingCart } from "@tabler/icons";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const HEADER_HEIGHT = 60;
+const HEADER_HEIGHT = 120;
 
 const useStyles: any = createStyles((theme) => ({
   root: {
@@ -105,6 +106,10 @@ const useStyles: any = createStyles((theme) => ({
       display: "none",
     },
   },
+  upperLink: {
+    fontSize: 12,
+    marginLeft: 20,
+  }
 }));
 
 interface HeaderResponsiveProps {
@@ -132,54 +137,83 @@ export function HeaderResponsive({ links }: HeaderResponsiveProps) {
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
-     <Container size="lg">
-     <Box className={classes.header}>
-        <Link to="/">
-          <Image src={DarsiLogo} width={60} />
+      <Container size="lg" sx={{display: "flex", justifyContent: "end", alignItems: "center", marginTop: 5}}>
+        <Link
+          to="/register/Vendor"
+          className={classes.upperLink}
+        >
+          Signup as Vendor
         </Link>
-        <Group spacing={5} className={classes.links}>
-          <Autocomplete
-            className={classes.search}
-            placeholder="Search"
-            icon={<IconSearch size={16} stroke={1.5} />}
-            data={[
-              "React",
-              "Angular",
-              "Vue",
-              "Next.js",
-              "Riot.js",
-              "Svelte",
-              "Blitz.js",
-            ]}
-          />
-          {items}
-          {/* <ColorSchemeToggler /> */}
-          <ActionIcon
-            variant="subtle"
-            sx={{ color: "black"}}
-            component={Link}
-            to="/cart"
-          >
-            <IconShoppingCart size={20} />
-          </ActionIcon>
-          <span>{cart.quantity}</span>
-        </Group>
+        <Link
+          className={classes.upperLink}
+          to="/register/Referrer"
+        >
+          Signup as Referrer
+        </Link>
+        <Link
+          className={classes.upperLink}
+          to="/register/Customer"
+        >
+          Signup
+        </Link>
+        <Link
+          className={classes.upperLink}
+          to="/login"
+        >
+          Login
+        </Link>
+      </Container>
+        <Divider
+        my="sm"
+      />
+      <Container size="lg">
+        <Box className={classes.header}>
+          <Link to="/">
+            <Image src={DarsiLogo} width={60} />
+          </Link>
+          <Group spacing={5} className={classes.links}>
+            <Autocomplete
+              className={classes.search}
+              placeholder="Search"
+              icon={<IconSearch size={16} stroke={1.5} />}
+              data={[
+                "React",
+                "Angular",
+                "Vue",
+                "Next.js",
+                "Riot.js",
+                "Svelte",
+                "Blitz.js",
+              ]}
+            />
+            {items}
+            {/* <ColorSchemeToggler /> */}
+            <ActionIcon
+              variant="subtle"
+              sx={{ color: "black" }}
+              component={Link}
+              to="/cart"
+            >
+              <IconShoppingCart size={20} />
+            </ActionIcon>
+            <span>{cart.quantity}</span>
+          </Group>
 
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          className={classes.burger}
-          size="sm"
-        />
-        <Transition transition="pop-top-right" duration={200} mounted={opened}>
-          {(styles) => (
-            <Paper className={classes.dropdown} withBorder style={styles}>
-              {items}
-            </Paper>
-          )}
-        </Transition>
-      </Box>
-     </Container>
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            className={classes.burger}
+            size="sm"
+          />
+          <Transition transition="pop-top-right" duration={200} mounted={opened}>
+            {(styles) => (
+              <Paper className={classes.dropdown} withBorder style={styles}>
+                {items}
+              </Paper>
+            )}
+          </Transition>
+        </Box>
+      </Container>
     </Header>
   );
 }
