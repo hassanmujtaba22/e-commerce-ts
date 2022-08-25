@@ -1,9 +1,11 @@
 import { ActionIcon, Button, Card, Container, createStyles, Grid, ScrollArea, Table, Text, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconSquareX } from '@tabler/icons';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { QuantityInput } from '../components/QuantityInput';
+import { createOrder } from '../redux/action/create_order';
 import { apply_discount_code } from '../redux/action/discount_code';
 import { addProduct, addProductToCart, clearProductFromCart, clear_cart } from '../redux/reducers/cartRedux';
 const useStyles = createStyles((theme) => ({
@@ -51,6 +53,7 @@ interface TableScrollAreaProps {
   data: { name: string; email: string; company: string }[];
 }
 function Cart() {
+  const navigate = useNavigate();
   const { classes: classesDiscountInput } = useStylesDiscountInput();
   const { classes, cx } = useStyles();
   const [scrolled, setScrolled] = useState(false);
@@ -68,41 +71,60 @@ function Cart() {
     let netAmount = profit * discount_percentage / 100
     return netAmount
   }
-  const rows = cart.products.map((product: any) => (
-    <tr key={product._id}>
-      <td width="100px">
-        <img
-          src={product.imageURL}
-          style={{ width: "100%" }}
-          alt="Product image"
-        />
-      </td>
-      <td width="300px">
-        {product.title}
-      </td>
-      <td >Rs.{product.price}</td>
-      <td width="100px">
-        <input type="number" id="qty" defaultValue={1} min={1} step={1} data-decimals={0} style={{ width: "100%" }}
-          value={product.quantity}
-          onChange={(e: any) => {
-            dispatch(addProductToCart({ ...product, quantity: e.target.value }))
-          }} />
-        {/* <QuantityInput value={product.quantity} onChange={(e: any) => {
-            dispatch(addProductToCart({ ...product, quantity: e.target.value }))
-          }}/> */}
-      </td>
-      <td>Rs.{product.quantity * product.price}</td>
-      <td>
-        <ActionIcon
-          variant="subtle"
-          sx={{ color: "black" }}
-          onClick={() => dispatch(clearProductFromCart(product))}
-        >
-          <IconSquareX size={20} />
-        </ActionIcon>
-      </td>
-    </tr>
-  ));
+  const form = useForm({
+    initialValues: {
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      city: "",
+      postalCode: "",
+      address: ""
+    },
+  });
+
+  const handleSubmit = async (values: any) => {
+    let cartData: any = {};
+    cartData.products = cart.products.map((x: any) => ({
+      productId: x._id,
+      vendor: x.vendor,
+      title: x.title,
+      profitMargin: x.profitMargin,
+      productCode: x.productCode,
+      price: x.price,
+      vendorPrice: x.vendorPrice,
+      qty: x.quantity,
+      stockCountPending: x.stockCountPending,
+      stockCountConsumed: x.stockCountConsumed,
+      totalSale: x.totalSale,
+    }));
+    if (cart.code) {
+      cartData.applied_Referral_Code = cart.code;
+    }
+    if (user) {
+      cartData.user = user._id;
+    }
+    cartData.name = values.fname + " " + values.lname;
+    cartData.email = values.email;
+    cartData.address = values.address;
+    cartData.city = values.city;
+    cartData.postalCode = values.postalCode;
+    cartData.phone = values.phone;
+    console.log(cartData);
+    
+    createOrder(cartData)
+      .then((res: any) => {
+        if (res.status === 200) {
+          alert(res.data.message);
+          dispatch(clear_cart());
+          navigate("/");
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((error: any) => alert(error));
+
+  }
   return (
     <Container
       size="lg"
@@ -114,25 +136,54 @@ function Cart() {
       }}
     >
       <Text weight={600} size="xl" sx={{ lineHeight: 1, marginBottom: 20 }}>
-        Cart
+        Billing Informotion
       </Text>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+
       <Grid columns={3}>
         <Grid.Col xs={3} sm={3} md={2} lg={2}>
-          <ScrollArea sx={{ height: 300 }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-            <Table sx={{ minWidth: "100%" }}>
-              <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Qty</th>
-                  <th>Total</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </Table>
-          </ScrollArea>
+            <TextInput
+              withAsterisk
+              label="First Name"
+              placeholder="Enter Your First Name"
+              {...form.getInputProps('firstname')}
+            />
+            <TextInput
+              withAsterisk
+              label="Last Name"
+              placeholder="Enter Your Last Name"
+              {...form.getInputProps('lastname')}
+            />
+            <TextInput
+              withAsterisk
+              label="Email"
+              placeholder="Enter Your Email"
+              {...form.getInputProps('email')}
+            />
+            <TextInput
+              withAsterisk
+              label="Phone"
+              placeholder="Enter Your Phone"
+              {...form.getInputProps('phone')}
+            />
+            <TextInput
+              withAsterisk
+              label="City"
+              placeholder="Enter Your City"
+              {...form.getInputProps('city')}
+            />
+            <TextInput
+              withAsterisk
+              label="Postcode / Zip"
+              placeholder="Enter Your Postcode / Zip"
+              {...form.getInputProps('postalCode')}
+            />
+            <TextInput
+              withAsterisk
+              label="Street address"
+              placeholder="Enter Your Street address"
+              {...form.getInputProps('address')}
+            />
         </Grid.Col>
         <Grid.Col xs={3} sm={3} md={1} lg={1}>
           <Card shadow="sm" p="lg" radius="md" withBorder sx={{ minWidth: "100%", height: "100%", background: "#F5F5F5" }}>
@@ -159,22 +210,13 @@ function Cart() {
                 </tbody>
               </Table>
             </ScrollArea>
-            <TextInput label="Discount Code" placeholder="Enter code to get discount" classNames={classesDiscountInput}
-              value={code} onChange={(e) => setCode(e.target.value)}
-            />
-            <Button variant="light" sx={{marginTop: 10, width: "100%"}} color="indigo" onClick={() =>
-              apply_discount_code(dispatch, code).then((res: any) =>
-                setPackage(res)
-              )
-            }>
-              Apply Code
-            </Button>
-            <Button color="red" sx={{marginTop: 10, width: "100%"}} component={Link} to="/checkout">
-              PROCEED TO CHECKOUT
+            <Button color="red" sx={{ marginTop: 10, width: "100%" }} type="submit">
+              Proceed to Checkout
             </Button>
           </Card>
         </Grid.Col>
       </Grid>
+      </form>
     </Container>
   )
 }
