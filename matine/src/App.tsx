@@ -35,7 +35,7 @@ export default function App() {
               <Route index element={<Home />} />
               <Route path="login" element={<Login />} />
               <Route path="register/:type" element={<Register />} />
-              {/* <Route path="cart" element={<Cart />} /> */}
+              <Route path="cart" element={<Cart />} />
               <Route path="products" element={<Products />} />
               <Route path="packages" element={<Packages />} />
               {/* <Route path="checkout" element={<Checkout />} /> */}
